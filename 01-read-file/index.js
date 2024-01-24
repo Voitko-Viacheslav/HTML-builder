@@ -1,7 +1,14 @@
 const fs = require('fs');
 const path = require('path');
+const pathToFile = path.resolve(__dirname, 'text.txt');
+const readableStream = fs.createReadStream(pathToFile, 'utf-8');
 
-fs.readFile(path.join(__dirname, 'text.txt'), 'utf-8', (err, data) => {
-  if (err) throw err;
-  console.log(data);
+readableStream.on('data', (chunk) => {
+  console.log(chunk);
 });
+
+readableStream.on('error', (err) => {
+  console.error(`Error: ${err.message}`);
+});
+
+readableStream.on('end', () => readableStream.close());
